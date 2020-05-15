@@ -1,5 +1,5 @@
 FROM nvcr.io/nvidia/tensorflow:19.09-py3
-LABEL yasuhiro osaka (aa16022@shibaura-it.ac.jp)
+LABEL yasuhiro osaka (md20017@shibaura-it.ac.jp)
 
 SHELL ["/bin/bash", "-c"]
 Arg UNAME=uchi
@@ -10,11 +10,11 @@ ENV DEBIAN_FRONTEND "noninteractive"
 RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y cmake libopenmpi-dev zlib1g-dev python3-tk
 RUN apt install -y emacs screen htop
-RUN mkdir /var/run/sshd
-RUN echo 'root:root' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
+# RUN mkdir /var/run/sshd
+# RUN echo 'root:root' | chpasswd
+# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
 
@@ -43,6 +43,7 @@ RUN usermod -aG sudo $UNAME
 RUN chsh -s /bin/bash ${UNAME}
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
+RUN apt-get autoclean
 USER ${UNAME}
 WORKDIR /home/${UNAME}
 ENV HOME /home/${UNAME}
@@ -59,6 +60,7 @@ RUN echo 'PS1_COLOR_BEGIN="\[\e[1;31m\]"' >> /home/$UNAME/.bashrc
 RUN echo 'PS1_COLOR_END="\[\e[m\]"' >> /home/$UNAME/.bashrc
 RUN echo 'PS1_HOST_NAME="docker"' >> /home/$UNAME/.bashrc
 RUN echo 'export PS1="${PS1_COLOR_BEGIN}\u@\${PS1_HOST_NAME} \W${PS1_COLOR_END}\\$ "' >> /home/$UNAME/.bashrc
+
 
 EXPOSE 22
 # COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
