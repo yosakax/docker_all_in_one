@@ -7,14 +7,14 @@ Arg UID=1000
 Arg arglist="UNAME UID"
 
 ENV DEBIAN_FRONTEND "noninteractive"
-# RUN apt-get update && apt-get install -y openssh-server
+RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y cmake libopenmpi-dev zlib1g-dev python3-tk
 RUN apt install -y emacs screen htop
-# RUN mkdir /var/run/sshd
-# RUN echo 'root:root' | chpasswd
-# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-# RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-# RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
+RUN mkdir /var/run/sshd
+RUN echo 'root:root' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
 
