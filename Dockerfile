@@ -7,7 +7,7 @@ Arg UID=1000
 Arg arglist="UNAME UID"
 
 ENV DEBIAN_FRONTEND "noninteractive"
-RUN apt-get update && apt-get install -y openssh-server
+# RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y cmake libopenmpi-dev zlib1g-dev python3-tk
 RUN apt install -y emacs screen htop
 # RUN mkdir /var/run/sshd
@@ -19,12 +19,12 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
 
 ## installing vscode
-RUN apt install -y curl
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-RUN install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-RUN apt install apt-transport-https
-RUN apt update && apt install -y code
+# RUN apt install -y curl
+# RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+# RUN install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+# RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+# RUN apt install apt-transport-https
+# RUN apt update && apt install -y code
 
 
 RUN pip install --upgrade pip
@@ -61,7 +61,17 @@ RUN echo 'PS1_COLOR_END="\[\e[m\]"' >> /home/$UNAME/.bashrc
 RUN echo 'PS1_HOST_NAME="docker"' >> /home/$UNAME/.bashrc
 RUN echo 'export PS1="${PS1_COLOR_BEGIN}\u@\${PS1_HOST_NAME} \W${PS1_COLOR_END}\\$ "' >> /home/$UNAME/.bashrc
 
+## install codeserver
+RUN mkdir -p $HOME/.local/lib $HOME/.local/bin
+RUN curl -fL https://github.com/cdr/code-server/releases/download/v3.4.1/code-server-3.4.1-linux-amd64.tar.gz | tar -C $HOME/.local/lib -xz
+RUN mv $HOME/.local/lib/code-server-3.4.1-linux-amd64 $HOME/.local/lib/code-server-3.4.1
+RUN ln -s $HOME/.local/lib/code-server-3.4.1/bin/code-server $HOME/.local/bin/code-server
 
-EXPOSE 22
+## install code-server-extensions
+RUN $HOME/.local/bin/code-server --install-extension ms-python.python
+RUN $HOME/.local/bin/code-server --install-extension ms-dotnettools.csharp
+RUN $HOME/.local/bin/code-server --install-extension ms-vscode.cpptools
+
+EXPOSE 8080
 # COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/sbin/sshd", "-D"]
