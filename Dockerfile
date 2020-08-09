@@ -1,8 +1,8 @@
-FROM nvcr.io/nvidia/tensorflow:19.09-py3
+FROM nvcr.io/nvidia/tensorflow:19.10-py3
 LABEL yasuhiro osaka (md20017@shibaura-it.ac.jp)
 
 SHELL ["/bin/bash", "-c"]
-Arg UNAME=uchi
+Arg UNAME=ubuntu
 Arg UID=1000
 Arg arglist="UNAME UID"
 
@@ -10,16 +10,16 @@ ENV DEBIAN_FRONTEND "noninteractive"
 RUN apt-get update && apt-get install -y openssh-server
 RUN apt-get install -y cmake libopenmpi-dev zlib1g-dev python3-tk
 RUN apt install -y emacs screen htop
-RUN mkdir /var/run/sshd
-RUN echo 'root:root' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
+# RUN mkdir /var/run/sshd
+# RUN echo 'root:root' | chpasswd
+# RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+# RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+# RUN sed -i.bak -e "s%http://archive.ubuntu.com/ubuntu/%http://ftp.iij.ad.jp/pub/linux/ubuntu/archive/%g" /etc/apt/sources.list
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
 
 ## installing vscode
-# RUN apt install -y curl
+RUN apt install -y curl
 # RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 # RUN install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
 # RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
@@ -36,7 +36,7 @@ RUN pip install seaborn tqdm pydot torch torchvision
 
 ##  Create User
 RUN useradd -m --uid ${UID} -d /home/${UNAME} --groups sudo  ${UNAME}
-RUN echo "${UNAME}:uchimura" | chpasswd
+RUN echo "${UNAME}:ubuntu" | chpasswd
 RUN echo "${UNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN chown -R ${UNAME}:${UNAME} /home/${UNAME}
 RUN usermod -aG sudo $UNAME
@@ -72,6 +72,6 @@ RUN $HOME/.local/bin/code-server --install-extension ms-python.python
 RUN $HOME/.local/bin/code-server --install-extension ms-dotnettools.csharp
 RUN $HOME/.local/bin/code-server --install-extension ms-vscode.cpptools
 
-EXPOSE 8080
+EXPOSE 22
 # COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/sbin/sshd", "-D"]
