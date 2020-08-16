@@ -7,7 +7,8 @@ Arg UID=1000
 Arg arglist="UNAME UID"
 
 ENV DEBIAN_FRONTEND "noninteractive"
-RUN apt-get update && apt-get install -y openssh-server
+RUN apt-get update 
+#&& apt-get install -y openssh-server
 RUN apt-get install -y cmake libopenmpi-dev zlib1g-dev python3-tk
 RUN apt install -y emacs screen htop
 # RUN mkdir /var/run/sshd
@@ -72,6 +73,9 @@ RUN $HOME/.local/bin/code-server --install-extension ms-python.python
 RUN $HOME/.local/bin/code-server --install-extension ms-dotnettools.csharp
 RUN $HOME/.local/bin/code-server --install-extension ms-vscode.cpptools
 
-EXPOSE 22
-# COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+## copy rcfiles
+COPY .screenrc /home/$UNAME/
+COPY .emacs /home/$UNAME/
+
+# EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
