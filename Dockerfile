@@ -63,15 +63,16 @@ RUN echo 'PS1_HOST_NAME="docker"' >> /home/$UNAME/.bashrc
 RUN echo 'export PS1="${PS1_COLOR_BEGIN}\u@\${PS1_HOST_NAME} \W${PS1_COLOR_END}\\$ "' >> /home/$UNAME/.bashrc
 
 ## install codeserver
-RUN mkdir -p $HOME/.local/lib $HOME/.local/bin
-RUN curl -fL https://github.com/cdr/code-server/releases/download/v3.4.1/code-server-3.4.1-linux-amd64.tar.gz | tar -C $HOME/.local/lib -xz
-RUN mv $HOME/.local/lib/code-server-3.4.1-linux-amd64 $HOME/.local/lib/code-server-3.4.1
-RUN ln -s $HOME/.local/lib/code-server-3.4.1/bin/code-server $HOME/.local/bin/code-server
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+#RUN mkdir -p $HOME/.local/lib $HOME/.local/bin
+#RUN curl -fL https://github.com/cdr/code-server/releases/download/v3.4.1/code-server-3.4.1-linux-amd64.tar.gz | tar -C $HOME/.local/lib -xz
+#RUN mv $HOME/.local/lib/code-server-3.4.1-linux-amd64 $HOME/.local/lib/code-server-3.4.1
+#RUN ln -s $HOME/.local/lib/code-server-3.4.1/bin/code-server $HOME/.local/bin/code-server
 
 ## install code-server-extensions
-RUN $HOME/.local/bin/code-server --install-extension ms-python.python
-RUN $HOME/.local/bin/code-server --install-extension ms-dotnettools.csharp
-RUN $HOME/.local/bin/code-server --install-extension ms-vscode.cpptools
+RUN code-server --install-extension ms-python.python
+RUN code-server --install-extension ms-dotnettools.csharp
+RUN code-server --install-extension ms-vscode.cpptools
 
 ## copy rcfiles
 COPY .screenrc /home/$UNAME/
