@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:19.10-py3
+FROM nvcr.io/nvidia/pytorch:20.06-py3
 LABEL yasuhiro osaka (md20017@shibaura-it.ac.jp)
 
 SHELL ["/bin/bash", "-c"]
