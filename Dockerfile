@@ -17,7 +17,7 @@ RUN apt install -y curl
 
 
 RUN pip install --upgrade pip
-###### other library
+###### other libraries
 RUN pip install seaborn tqdm pydot torch torchvision
 
 ##  Create User
