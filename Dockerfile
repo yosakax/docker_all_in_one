@@ -77,6 +77,7 @@ RUN code-server --install-extension ms-vscode.cpptools
 ## copy rcfiles
 COPY .screenrc /home/$UNAME/
 COPY .emacs /home/$UNAME/
+COPY .nanorc /home/$UNAME/
 
 # EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
