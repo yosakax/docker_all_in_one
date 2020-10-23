@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:20.09-tf1-py3
+FROM nvcr.io/nvidia/tensorflow:20.03-tf1-py3
 LABEL yasuhiro osaka (md20017@shibaura-it.ac.jp)
 
 SHELL ["/bin/bash", "-c"]
