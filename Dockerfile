@@ -17,6 +17,7 @@ RUN apt-get install sudo
 
 ## installing vscode
 RUN apt install -y curl
+RUN ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # RUN pip install --upgrade pip
 # RUN pip install gym
