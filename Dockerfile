@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:19.10-py3
+FROM nvcr.io/nvidia/tensorflow:20.03-py3
 LABEL yasuhiro osaka (md20017@shibaura-it.ac.jp)
 
 SHELL ["/bin/bash", "-c"]
@@ -19,21 +19,14 @@ RUN apt install -y emacs screen htop
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
 
-## installing vscode
 RUN apt install -y curl
-# RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-# RUN install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-# RUN sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-# RUN apt install apt-transport-https
-# RUN apt update && apt install -y code
-
 
 RUN pip install --upgrade pip
 RUN pip install gym
 ###### Stable-baselines
-RUN pip install stable-baselines[mpi]
+#RUN pip install stable-baselines[mpi]
 ###### other library
-RUN pip install seaborn tqdm pydot torch torchvision
+RUN pip install seaborn tqdm pydot
 
 ##  Create User
 RUN useradd -m --uid ${UID} -d /home/${UNAME} --groups sudo  ${UNAME}
@@ -71,7 +64,6 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 ## install code-server-extensions
 RUN code-server --install-extension ms-python.python
-RUN code-server --install-extension ms-dotnettools.csharp
 RUN code-server --install-extension ms-vscode.cpptools
 
 ## copy rcfiles
