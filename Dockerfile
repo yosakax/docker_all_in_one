@@ -13,8 +13,8 @@ RUN apt install -y emacs screen htop
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo
-## install libs for pyenv and so on.
-RUN apt install -y \
+## install libs for pyenv and opencv.
+RUN apt-get install -y \
     curl\
     build-essential \
     libffi-dev \
@@ -24,7 +24,9 @@ RUN apt install -y \
     libbz2-dev \
     libreadline-dev \
     libsqlite3-dev \
-    git
+    git\
+    mesa-utils
+
 
 
 ##  Create User
